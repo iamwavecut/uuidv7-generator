@@ -1,2 +1,5 @@
-# uuidv7-generator
-just an online tool to generate random uuidv7 strings
+<center>
+## Just UUID v7 generator
+<https://iamwavecut.github.io/uuidv7-generator
+Generate and copy uids easilly
+</center>
