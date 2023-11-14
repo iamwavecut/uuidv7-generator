@@ -111,10 +111,10 @@
 
             console.log(code)
             console.log(res)
+            document.getElementById('code').removeClass('error')
             if (res instanceof Error.toString()) {
-                return
+                document.getElementById('code').addClass('error')
             }
-
         }
 
         let pressGen = () => {
@@ -131,6 +131,7 @@
         document.getElementById('gen').addEventListener('click', pressGen);
         document.getElementById('copy').addEventListener('click', pressCopy);
         pressGen();
+        validateCode();
     });
 </script>
 <div><button id="gen">Generate new</button></div>
