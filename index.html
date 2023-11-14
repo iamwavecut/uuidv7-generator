@@ -42,7 +42,7 @@
         }
 
         parse(uuid) {
-            let uuidWithHyphens = uuid.replace('-', '').replace(/.{8})(.{4})(.{4})(.{4})(.{12})/, "$1-$2-$3-$4-$5");
+            let uuidWithHyphens = uuid.replace('-', '').replace(/(.{8})(.{4})(.{4})(.{4})(.{12})/, "$1-$2-$3-$4-$5");
 
             // Check if valid UUID
             let uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
