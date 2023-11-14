@@ -67,11 +67,55 @@
             // Check if UUID is empty
             return uuid === "00000000-0000-0000-0000-000000000000";
         }
+
+        validate(uuid) {
+            uuid = code.replace('-', '').replace(/(.{8})(.{4})(.{4})(.{4})(.{12})/, "$1-$2-$3-$4-$5");
+            let uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+            if (!uuidRegex.test(uuidWithHyphens)) {
+                return Error('UUID pattern is invalid');
+            }
+
+            // Extract version, timestamp and variant
+            const version = this.version(uuid);
+            const timestamp = this.timestamp(uuid);
+            const variant = parseInt(uuid.charAt(16), 16);
+
+            // Create date instances for comparison
+            const date = new Date(timestamp);
+            const now = new Date();
+
+            // Check version to be 7
+            if (version !== 7) return new Error("Invalid version");
+
+            // Check timestamp to be within reasonable limits (past 24 hours)
+            if (!(date.getTime() > now.getTime() - 24 * 60 * 60 * 1000
+                && date.getTime() < now.getTime() + 1000)) {
+                return new Error("Invalid timestamp");
+            }
+
+            // Check variant to be 4 (most common variant)
+            if (!(variant in [1, 2, 3, 4])) return new Error("Invalid variant");
+
+            // If all checks pass, uuid is valid
+            return true;
+        }
     }
 
 
     window.addEventListener('DOMContentLoaded', (event) => {
         let uuidv7gen = new UUIDGenerator()
+
+        let validateCode = () => {
+            const code = document.getElementById('code').value;
+            let res = uuidv7gen.validate(code)
+
+            console.log(code)
+            console.log(res)
+            if (res instanceof Error.toString()) {
+                return
+            }
+
+        }
 
         let pressGen = () => {
             const uuid = uuidv7gen.next();
@@ -86,7 +130,7 @@
 
         document.getElementById('gen').addEventListener('click', pressGen);
         document.getElementById('copy').addEventListener('click', pressCopy);
-        pressGen()
+        pressGen();
     });
 </script>
 <div><button id="gen">Generate new</button></div>
