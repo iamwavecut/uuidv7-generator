@@ -71,7 +71,7 @@
         validate(uuid) {
             uuid = uuid.replace('-', '').replace(/(.{8})(.{4})(.{4})(.{4})(.{12})/, "$1-$2-$3-$4-$5");
             let uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-            if (!uuidRegex.test(uuidWithHyphens)) {
+            if (!uuidRegex.test(uuid)) {
                 return Error('UUID pattern is invalid');
             }
 
