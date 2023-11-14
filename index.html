@@ -102,43 +102,41 @@
     }
 
 
-    window.addEventListener('DOMContentLoaded', (event) => {
-        let uuidv7gen = new UUIDGenerator()
+    function init() {
+        const uuidGenerator = new UUIDGenerator();
 
-        let validateCode = () => {
-            const code = document.getElementById('code').value;
-            let res = uuidv7gen.validate(code)
+        const codeEl = document.getElementById('code');
+        const genBtn = document.getElementById('gen');
+        const copyBtn = document.getElementById('copy');
 
-            console.log(code)
-            console.log(res)
-            document.getElementById('code').removeClass('error')
-            if (res instanceof Error.toString()) {
-                document.getElementById('code').addClass('error')
+        function validateCode() {
+            const code = codeEl.value;
+            const isValid = uuidGenerator.validate(code);
+
+            codeEl.classList.remove('error');
+            if (isValid instanceof Error) {
+                codeEl.classList.add('error');
             }
         }
 
-        document.getElementById('code').addEventListener('change', validateCode)
-
-
-        let pressGen = () => {
-            const uuid = uuidv7gen.next();
-            document.getElementById('code').value = uuid;
+        function generateUuid() {
+            const uuid = uuidGenerator.next();
+            codeEl.value = uuid;
             validateCode();
         }
 
-
-        let pressCopy = () => {
-            const text = document.getElementById('code').value;
-            navigator.clipboard.writeText(text);
+        function copyUuid() {
+            navigator.clipboard.writeText(codeEl.value);
         }
 
-        document.getElementById('gen').addEventListener('click', pressGen);
-        document.getElementById('copy').addEventListener('click', pressCopy);
-        pressGen();
+        codeEl.addEventListener('change', validateCode);
+        genBtn.addEventListener('click', generateUuid);
+        copyBtn.addEventListener('click', copyUuid);
+
+        generateUuid();
         validateCode();
-    });
+    }
 </script>
 <div><button id="gen">Generate new</button></div>
-<textarea id="code" readonly>
-</textarea>
+<textarea id="code"></textarea>
 <div><button id="copy">Copy to clipboard</button></div>
