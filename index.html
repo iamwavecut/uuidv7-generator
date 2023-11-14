@@ -36,11 +36,13 @@
             val2[6] = rnd2[6];
             val2[7] = rnd2[5];
 
-            return [...val1, ...val2].map(b => b.toString(16).padStart(2, '0')).join('');
+            uuid = [...val1, ...val2].map(b => b.toString(16).padStart(2, '0')).join('');
+            let uuidWithHyphens = uuid.replace(/(.{8})(.{4})(.{4})(.{4})(.{12})/, "$1-$2-$3-$4-$5");
+            return uuidWithHyphens
         }
 
         parse(uuid) {
-            let uuidWithHyphens = uuid.replace(/(.{8})(.{4})(.{4})(.{4})(.{12})/, "$1-$2-$3-$4-$5");
+            let uuidWithHyphens = uuid.replace('-', '').replace(/.{8})(.{4})(.{4})(.{4})(.{12})/, "$1-$2-$3-$4-$5");
 
             // Check if valid UUID
             let uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
