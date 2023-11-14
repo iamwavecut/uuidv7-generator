@@ -36,7 +36,7 @@
             val2[6] = rnd2[6];
             val2[7] = rnd2[5];
 
-            uuid = [...val1, ...val2].map(b => b.toString(16).padStart(2, '0')).join('');
+            let uuid = [...val1, ...val2].map(b => b.toString(16).padStart(2, '0')).join('');
             let uuidWithHyphens = uuid.replace(/(.{8})(.{4})(.{4})(.{4})(.{12})/, "$1-$2-$3-$4-$5");
             return uuidWithHyphens
         }
@@ -83,7 +83,7 @@
             const text = document.getElementById('code').value;
             navigator.clipboard.writeText(text);
         }
-        
+
         document.getElementById('gen').addEventListener('click', pressGen);
         document.getElementById('copy').addEventListener('click', pressCopy);
         pressGen()
