@@ -68,20 +68,22 @@
             return uuid === "00000000-0000-0000-0000-000000000000";
         }
     }
-    let uuidv7gen = new UUIDGenerator()
 
-    let pressGen = () => {
-        const uuid = uuidv7gen.next();
-        document.getElementById('code').value = uuid;
-    }
-
-
-    let pressCopy = () => {
-        const text = document.getElementById('code').value;
-        navigator.clipboard.writeText(text);
-    }
 
     window.addEventListener('DOMContentLoaded', (event) => {
+        let uuidv7gen = new UUIDGenerator()
+
+        let pressGen = () => {
+            const uuid = uuidv7gen.next();
+            document.getElementById('code').value = uuid;
+        }
+
+
+        let pressCopy = () => {
+            const text = document.getElementById('code').value;
+            navigator.clipboard.writeText(text);
+        }
+        
         document.getElementById('gen').addEventListener('click', pressGen);
         document.getElementById('copy').addEventListener('click', pressCopy);
         pressGen()
