@@ -2,3 +2,17 @@
 ---
 
 @import "{{ site.theme }}";
+
+textarea {
+    margin: 0 auto;
+}
+
+button {
+    display: inline-block;
+    
+    background-color: aquamarine;
+    color: #000;
+    #gen {
+        font-weight: bolder;
+    }
+}
