@@ -1,3 +1,89 @@
-<!doctype html>
-<html>  
-</html>
+<script>
+    class UUIDGenerator {
+
+        constructor() {
+            this.counter = 0;
+        }
+
+        next() {
+            this.ts = Date.now();
+            this.counter += 1;
+
+            // Create 128-bit random number
+            let rnd1 = window.crypto.getRandomValues(new Uint8Array(8));
+            let rnd2 = window.crypto.getRandomValues(new Uint8Array(8));
+
+            let val1 = new Uint8Array(8);
+            let val2 = new Uint8Array(8);
+
+            // Generate first 8 bytes
+            val1[0] = (this.counter & 0xFFF) | ((rnd1[3] & 0x0F) << 14);
+            val1[1] = rnd1[2];
+            val1[2] = rnd1[1];
+            val1[3] = rnd1[0];
+            val1[4] = rnd1[7];
+            val1[5] = rnd1[6];
+            val1[6] = rnd1[5];
+            val1[7] = rnd1[4];
+
+            // Generate last 8 bytes
+            val2[0] = (this.ts & 0xFFFF) >> 8 | ((rnd2[1] & 0x0F) << 4);
+            val2[1] = this.ts & 0xFF;
+            val2[2] = rnd2[0];
+            val2[3] = rnd2[3];
+            val2[4] = rnd2[2];
+            val2[5] = rnd2[7];
+            val2[6] = rnd2[6];
+            val2[7] = rnd2[5];
+
+            return [...val1, ...val2].map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        parse(uuid) {
+            let uuidWithHyphens = uuid.replace(/(.{8})(.{4})(.{4})(.{4})(.{12})/, "$1-$2-$3-$4-$5");
+
+            // Check if valid UUID
+            let uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+            let valid = uuidRegex.test(uuidWithHyphens);
+
+            return valid ? uuidWithHyphens : new Error("Invalid UUID");
+        }
+
+        version(uuid) {
+            let hexVersion = uuid.charAt(19); // 20th character represents the version
+            return parseInt(hexVersion, 16);
+        }
+
+        timestamp(uuid) {
+            // Convert the timestamp part of UUID back to a UNIX timestamp
+            let timestampHex = uuid.slice(0, 8) + uuid.slice(9, 13);
+            let timestamp = parseInt(timestampHex, 16);
+            return timestamp;
+        }
+
+        empty(uuid) {
+            // Check if UUID is empty
+            return uuid === "00000000-0000-0000-0000-000000000000";
+        }
+    }
+    let uuidv7gen = new UUIDGenerator()
+
+    let pressGen = () => {
+        const uuid = uuidv7gen.next();
+        document.getElementById('code').value = uuid;
+    }
+    document.getElementById('gen').addEventListener('click', pressGen);
+
+    let pressCopy = () => {
+        const text = document.getElementById('code').value;
+        navigator.clipboard.writeText(text);
+    }
+    document.getElementById('copy').addEventListener('click', pressCopy);
+    document.onload = function(){
+        presGen()
+    }
+</script>
+<div><button id="gen">Generate new</button></div>
+<textarea id="code" readonly>
+</textarea>
+<div><button id="copy">Copy to clipboard</button></div>
