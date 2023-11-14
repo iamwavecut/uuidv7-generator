@@ -117,9 +117,13 @@
             }
         }
 
+        document.getElementById('code').addEventListener('change', validateCode)
+
+
         let pressGen = () => {
             const uuid = uuidv7gen.next();
             document.getElementById('code').value = uuid;
+            validateCode();
         }
 
 
