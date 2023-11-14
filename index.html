@@ -72,16 +72,18 @@
         const uuid = uuidv7gen.next();
         document.getElementById('code').value = uuid;
     }
-    document.getElementById('gen').addEventListener('click', pressGen);
+
 
     let pressCopy = () => {
         const text = document.getElementById('code').value;
         navigator.clipboard.writeText(text);
     }
-    document.getElementById('copy').addEventListener('click', pressCopy);
-    document.onload = function(){
+
+    window.addEventListener('DOMContentLoaded', (event) => {
+        document.getElementById('gen').addEventListener('click', pressGen);
+        document.getElementById('copy').addEventListener('click', pressCopy);
         presGen()
-    }
+    });
 </script>
 <div><button id="gen">Generate new</button></div>
 <textarea id="code" readonly>
